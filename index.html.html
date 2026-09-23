@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>B.Tech Logbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDE8DC;
+  --paper-2:#E3DDCB;
+  --ink:#1C2126;
+  --ink-soft:#4A5158;
+  --blueprint:#2B4570;
+  --blueprint-light:#6E8CAE;
+  --amber:#B8792B;
+  --green:#4C7A5E;
+  --red:#9C4A3E;
+  --line:#C9C2AE;
+  --card:#F5F2E9;
+  --font-head:'Space Grotesk',sans-serif;
+  --font-body:'IBM Plex Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#181B20;
+    --paper-2:#1F2329;
+    --ink:#E9E5D8;
+    --ink-soft:#A9AFB6;
+    --blueprint:#7C9CC4;
+    --blueprint-light:#4A5F7E;
+    --amber:#D69A4E;
+    --green:#7FAF93;
+    --red:#C47D6F;
+    --line:#33383F;
+    --card:#20242A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#181B20;
+  --paper-2:#1F2329;
+  --ink:#E9E5D8;
+  --ink-soft:#A9AFB6;
+  --blueprint:#7C9CC4;
+  --blueprint-light:#4A5F7E;
+  --amber:#D69A4E;
+  --green:#7FAF93;
+  --red:#C47D6F;
+  --line:#33383F;
+  --card:#20242A;
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--paper);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:28px 28px;
+  background-attachment:local;
+  color:var(--ink);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  min-height:100%;
+}
+.wrap{max-width:920px;margin:0 auto;padding:20px 16px 60px;}
+
+/* Title block */
+.titleblock{
+  border:1.5px solid var(--ink);
+  background:var(--card);
+  margin-bottom:18px;
+  position:relative;
+}
+.titleblock-top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:16px 18px;
+  border-bottom:1.5px solid var(--ink);
+  gap:12px;
+}
+.titleblock h1{
+  font-family:var(--font-head);
+  font-weight:700;
+  font-size:1.5rem;
+  margin:0;
+  letter-spacing:0.01em;
+}
+.titleblock .sub{
+  font-family:var(--font-mono);
+  font-size:0.78rem;
+  color:var(--ink-soft);
+  margin-top:3px;
+}
+.sem-badge{
+  font-family:var(--font-mono);
+  font-size:0.82rem;
+  border:1.5px solid var(--blueprint);
+  color:var(--blueprint);
+  padding:6px 10px;
+  white-space:nowrap;
+}
+.titleblock-fields{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  font-family:var(--font-mono);
+  font-size:0.74rem;
+}
+.tf{
+  padding:10px 14px;
+  border-right:1px solid var(--line);
+}
+.tf:last-child{border-right:none;}
+.tf label{
+  display:block;
+  color:var(--ink-soft);
+  font-size:0.68rem;
+  margin-bottom:4px;
+}
+.tf input,.tf select{
+  width:100%;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--line);
+  color:var(--ink);
+  font-family:var(--font-mono);
+  font-size:0.82rem;
+  padding:2px 0;
+}
+.tf input:focus,.tf select:focus{outline:none;border-bottom-color:var(--blueprint);}
+
+/* Nav tabs styled like folder dividers */
+.tabs{
+  display:flex;
+  gap:4px;
+  margin-bottom:16px;
+  overflow-x:auto;
+  border-bottom:1.5px solid var(--ink);
+}
+.tab-btn{
+  font-family:var(--font-head);
+  font-weight:600;
+  font-size:0.86rem;
+  background:var(--paper-2);
+  border:1.5px solid var(--ink);
+  border-bottom:none;
+  color:var(--ink-soft);
+  padding:9px 16px 8px;
+  cursor:pointer;
+  white-space:nowrap;
+  position:relative;
+  top:1.5px;
+}
+.tab-btn.active{
+  background:var(--card);
+  color:var(--ink);
+  top:0;
+  padding-top:10.5px;
+}
+.tab-btn:focus-visible{outline:2px solid var(--blueprint);outline-offset:-2px;}
+
+.panel{display:none;}
+.panel.active{display:block;}
+
+.card{
+  border:1.5px solid var(--ink);
+  background:var(--card);
+  padding:18px;
+  margin-bottom:16px;
+}
+.card h2{
+  font-family:var(--font-head);
+  font-size:1.05rem;
+  margin:0 0 14px;
+  font-weight:600;
+}
+.card h2 .n{color:var(--blueprint);font-family:var(--font-mono);font-size:0.85rem;margin-right:8px;}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media (max-width:640px){.grid2{grid-template-columns:1fr;}}
+
+/* stat blocks */
+.stat{
+  border-left:3px solid var(--blueprint);
+  padding:4px 0 4px 12px;
+}
+.stat .label{font-size:0.74rem;color:var(--ink-soft);}
+.stat .value{font-family:var(--font-mono);font-size:1.5rem;font-weight:600;}
+.stat.over{border-color:var(--red);}
+.stat.over .value{color:var(--red);}
+.stat.ok{border-color:var(--green);}
+
+/* progress scale (ruler style) */
+.scale{
+  position:relative;
+  height:34px;
+  border:1px solid var(--ink);
+  background:repeating-linear-gradient(90deg, var(--line) 0, var(--line) 1px, transparent 1px, transparent calc(100%/8));
+  margin:10px 0 6px;
+}
+.scale-fill{
+  position:absolute;top:0;left:0;bottom:0;
+  background:var(--blueprint-light);
+  opacity:0.5;
+}
+.scale-marks{
+  display:flex;
+  font-family:var(--font-mono);
+  font-size:0.65rem;
+  color:var(--ink-soft);
+  margin-bottom:14px;
+}
+.scale-marks span{flex:1;text-align:center;}
+.scale-marks span.now{color:var(--blueprint);font-weight:600;}
+
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bar-label{width:120px;font-size:0.78rem;color:var(--ink-soft);flex-shrink:0;}
+.bar-track{flex:1;height:16px;background:var(--paper-2);border:1px solid var(--line);position:relative;}
+.bar-fill{height:100%;background:var(--blueprint);}
+.bar-amt{width:80px;text-align:right;font-family:var(--font-mono);font-size:0.76rem;flex-shrink:0;}
+
+/* forms */
+.form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+.form-row .field{flex:1;min-width:110px;}
+.field label{display:block;font-size:0.7rem;color:var(--ink-soft);margin-bottom:4px;font-family:var(--font-mono);}
+.field input,.field select,.field textarea{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:0.88rem;
+  padding:8px 9px;
+}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blueprint);}
+.btn{
+  font-family:var(--font-head);
+  font-weight:600;
+  font-size:0.82rem;
+  background:var(--blueprint);
+  color:var(--paper);
+  border:1.5px solid var(--blueprint);
+  padding:9px 18px;
+  cursor:pointer;
+  align-self:flex-end;
+}
+.btn:hover{opacity:0.9;}
+.btn.ghost{background:transparent;color:var(--blueprint);}
+.btn.small{padding:5px 10px;font-size:0.72rem;}
+.btn.danger{background:transparent;color:var(--red);border-color:var(--red);}
+
+/* ledger table */
+table.ledger{width:100%;border-collapse:collapse;font-size:0.85rem;}
+table.ledger th{
+  text-align:left;
+  font-family:var(--font-mono);
+  font-size:0.7rem;
+  color:var(--ink-soft);
+  border-bottom:1.5px solid var(--ink);
+  padding:6px 8px;
+  font-weight:500;
+}
+table.ledger td{
+  padding:8px 8px;
+  border-bottom:1px dashed var(--line);
+  vertical-align:top;
+}
+table.ledger tr:hover td{background:var(--paper-2);}
+.amt{font-family:var(--font-mono);text-align:right;white-space:nowrap;}
+.del-btn{
+  background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:0.9rem;
+  padding:2px 6px;
+}
+.del-btn:hover{color:var(--red);}
+.tag{
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  border:1px solid var(--line);
+  padding:2px 6px;
+  color:var(--ink-soft);
+  display:inline-block;
+}
+
+.empty{
+  padding:24px 10px;
+  text-align:center;
+  color:var(--ink-soft);
+  font-size:0.85rem;
+  border:1px dashed var(--line);
+}
+
+/* checklist */
+.checklist-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 4px;
+  border-bottom:1px dashed var(--line);
+}
+.checklist-item input[type=checkbox]{
+  width:17px;height:17px;margin-top:2px;accent-color:var(--blueprint);flex-shrink:0;cursor:pointer;
+}
+.checklist-item .txt{flex:1;font-size:0.88rem;}
+.checklist-item.done .txt{color:var(--ink-soft);text-decoration:line-through;}
+.checklist-item .meta{font-family:var(--font-mono);font-size:0.68rem;color:var(--ink-soft);margin-top:2px;}
+.pri-high{color:var(--red);}
+.pri-med{color:var(--amber);}
+.pri-low{color:var(--green);}
+
+.seg-tabs{display:flex;gap:0;margin-bottom:14px;border:1px solid var(--line);width:fit-content;}
+.seg-tabs button{
+  font-family:var(--font-mono);font-size:0.76rem;
+  background:transparent;border:none;color:var(--ink-soft);
+  padding:6px 14px;cursor:pointer;border-right:1px solid var(--line);
+}
+.seg-tabs button:last-child{border-right:none;}
+.seg-tabs button.active{background:var(--blueprint);color:var(--paper);}
+
+.footnote{font-family:var(--font-mono);font-size:0.68rem;color:var(--ink-soft);margin-top:10px;}
+
+::-webkit-scrollbar{height:6px;width:6px;}
+::-webkit-scrollbar-thumb{background:var(--line);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="titleblock">
+    <div class="titleblock-top">
+      <div>
+        <h1 id="deckTitle">B.Tech Logbook</h1>
+        <div class="sub" id="deckSub">Kharcha · B.Tech + IITM BS planner · Tasks — sab ek jagah</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
+        <div class="sem-badge" id="semBadge">SEM — / 8</div>
+        <div class="sem-badge" id="iitmBadge" style="border-color:var(--amber);color:var(--amber);">IITM — —</div>
+      </div>
+    </div>
+    <div class="titleblock-fields">
+      <div class="tf">
+        <label>Naam</label>
+        <input id="fName" type="text" placeholder="Your name">
+      </div>
+      <div class="tf">
+        <label>Branch (B.Tech)</label>
+        <input id="fBranch" type="text" placeholder="e.g. CSE (AI)">
+      </div>
+      <div class="tf">
+        <label>B.Tech start (month/year)</label>
+        <input id="fStart" type="month">
+      </div>
+      <div class="tf">
+        <label>Current semester (B.Tech)</label>
+        <select id="fSem">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+          <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          <option value="7">7</option><option value="8">8</option>
+        </select>
+      </div>
+    </div>
+    <div class="titleblock-fields" style="grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);">
+      <div class="tf">
+        <label>IITM BS start (month/year)</label>
+        <input id="fIitmStart" type="month">
+      </div>
+      <div class="tf">
+        <label>IITM BS — current level</label>
+        <select id="fIitmLevel">
+          <option value="foundation">Foundation</option>
+          <option value="diploma-prog">Diploma — Programming</option>
+          <option value="diploma-ds">Diploma — Data Science</option>
+          <option value="degree">BSc / BS Degree</option>
+        </select>
+      </div>
+      <div class="tf">
+        <label>IITM BS — current term</label>
+        <input id="fIitmTerm" type="text" placeholder="e.g. Jan 2026 term">
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="expenses">Kharcha</button>
+    <button class="tab-btn" data-tab="planner">Planner</button>
+    <button class="tab-btn" data-tab="tasks">Tasks</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="panel active" id="panel-overview">
+    <div class="card">
+      <h2><span class="n">01</span>4 saal ki journey</h2>
+      <div class="scale">
+        <div class="scale-fill" id="ovScaleFill"></div>
+      </div>
+      <div class="scale-marks" id="ovScaleMarks"></div>
+      <div class="footnote">8 semesters, har ek 6 mahine ka. Current semester title block me set karo.</div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2><span class="n">02</span>Paisa</h2>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="stat"><div class="label">Is mahine kharcha</div><div class="value" id="ovMonthSpent">₹0</div></div>
+          <div class="stat" id="ovBudgetStat"><div class="label">Monthly budget me bacha</div><div class="value" id="ovBudgetLeft">—</div></div>
+          <div class="stat"><div class="label">Ab tak total kharcha (sabhi entries)</div><div class="value" id="ovTotalSpent">₹0</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2><span class="n">03</span>Planner progress</h2>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="stat"><div class="label">B.Tech — is semester ke items</div><div class="value" id="ovSemDone">0 / 0</div></div>
+          <div class="stat"><div class="label">IITM BS — is level ke items</div><div class="value" id="ovIitmDone">0 / 0</div></div>
+          <div class="stat"><div class="label">Overall (sab mila ke) complete</div><div class="value" id="ovAllDone">0 / 0</div></div>
+          <div class="stat"><div class="label">Pending tasks</div><div class="value" id="ovPendingTasks">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">04</span>Aage kya karna hai — agle 5 tasks</h2>
+      <div id="ovUpcoming"></div>
+    </div>
+  </div>
+
+  <!-- EXPENSES -->
+  <div class="panel" id="panel-expenses">
+    <div class="card">
+      <h2><span class="n">01</span>Naya kharcha add karo</h2>
+      <div class="form-row">
+        <div class="field" style="max-width:150px;">
+          <label>Date</label>
+          <input type="date" id="exDate">
+        </div>
+        <div class="field" style="max-width:160px;">
+          <label>Category</label>
+          <select id="exCat">
+            <option>Hostel / Rent</option>
+            <option>Mess / Food</option>
+            <option>Books / Stationery</option>
+            <option>Travel</option>
+            <option>College fees</option>
+            <option>Subscriptions</option>
+            <option>Entertainment</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field" style="max-width:120px;">
+          <label>Amount (₹)</label>
+          <input type="number" id="exAmt" placeholder="0" min="0">
+        </div>
+        <div class="field">
+          <label>Note (kaha / kispe)</label>
+          <input type="text" id="exNote" placeholder="e.g. auto se hostel">
+        </div>
+        <button class="btn" id="exAdd">Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">02</span>Monthly budget</h2>
+      <div class="form-row" style="align-items:flex-end;">
+        <div class="field" style="max-width:180px;">
+          <label>Har mahine kitna kharch hona chahiye (₹)</label>
+          <input type="number" id="budgetInput" min="0" placeholder="e.g. 8000">
+        </div>
+        <button class="btn ghost" id="budgetSave">Save budget</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">03</span>Category-wise breakdown — is mahine</h2>
+      <div id="exBreakdown"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">04</span>Saare entries</h2>
+      <div id="exList"></div>
+    </div>
+  </div>
+
+  <!-- PLANNER -->
+  <div class="panel" id="panel-planner">
+    <div class="card">
+      <h2><span class="n">01</span>Track choose karo</h2>
+      <div class="seg-tabs" id="trackSeg">
+        <button class="active" data-track="btech">B.Tech (Semester)</button>
+        <button data-track="iitm">IITM BS (Level)</button>
+      </div>
+
+      <div id="btechSegWrap">
+        <div class="seg-tabs" id="semSeg"></div>
+      </div>
+      <div id="iitmSegWrap" style="display:none;">
+        <div class="seg-tabs" id="iitmSeg"></div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Item add karo (subject / course / project / exam / certification...)</label>
+          <input type="text" id="plItem" placeholder="e.g. PDSA course clear karna, MAD 1 project submit">
+        </div>
+        <button class="btn" id="plAdd">Add</button>
+      </div>
+      <div id="plStat" class="footnote"></div>
+      <div id="plList"></div>
+    </div>
+  </div>
+
+  <!-- TASKS -->
+  <div class="panel" id="panel-tasks">
+    <div class="card">
+      <h2><span class="n">01</span>Naya task</h2>
+      <div class="form-row">
+        <div class="field">
+          <label>Kya karna hai</label>
+          <input type="text" id="tkText" placeholder="e.g. assignment submit karna">
+        </div>
+        <div class="field" style="max-width:150px;">
+          <label>Due date</label>
+          <input type="date" id="tkDate">
+        </div>
+        <div class="field" style="max-width:120px;">
+          <label>Priority</label>
+          <select id="tkPri">
+            <option value="low">Low</option>
+            <option value="med" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <button class="btn" id="tkAdd">Add</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="n">02</span>Task list</h2>
+      <div class="seg-tabs" id="tkFilter">
+        <button class="active" data-f="all">All</button>
+        <button data-f="pending">Pending</button>
+        <button data-f="done">Done</button>
+      </div>
+      <div id="tkList"></div>
+    </div>
+  </div>
+
+  <div class="footnote" style="text-align:center;margin-top:20px;">Sab data sirf is browser me save hota hai (locally) — kisi aur device pe nahi dikhega.</div>
+</div>
+
+<script>
+const KEY = 'btechLogbookData';
+let state = load();
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){
+      const d = JSON.parse(raw);
+      if(!d.iitm) d.iitm = {};
+      if(!d.profile) d.profile = {};
+      if(d.profile.iitmStart===undefined) d.profile.iitmStart='';
+      if(d.profile.iitmLevel===undefined) d.profile.iitmLevel='foundation';
+      if(d.profile.iitmTerm===undefined) d.profile.iitmTerm='';
+      if(!d.profile.name) d.profile.name='Shubham Pal';
+      if(!d.profile.branch) d.profile.branch='CSE (AI)';
+      return d;
+    }
+  }catch(e){}
+  return {
+    profile:{
+      name:'Shubham Pal', branch:'CSE (AI)', start:'', sem:'1', budget:0,
+      iitmStart:'', iitmLevel:'foundation', iitmTerm:''
+    },
+    expenses:[],
+    semesters:{}, // B.Tech: { "1": [{id,text,done}], ... }
+    iitm:{}, // IITM BS: { "foundation":[...], "diploma-prog":[...], "diploma-ds":[...], "degree":[...] }
+    tasks:[]
+  };
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){ console.error('save failed', e); }
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function inr(n){ return '₹' + Number(n||0).toLocaleString('en-IN'); }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function thisMonthKey(){ return new Date().toISOString().slice(0,7); }
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll('.tab-btn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('panel-'+b.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---------- Profile / title block ---------- */
+const IITM_LEVEL_LABELS = {
+  'foundation':'Foundation',
+  'diploma-prog':'Diploma · Programming',
+  'diploma-ds':'Diploma · Data Science',
+  'degree':'BSc/BS Degree'
+};
+function initProfile(){
+  document.getElementById('fName').value = state.profile.name||'';
+  document.getElementById('fBranch').value = state.profile.branch||'';
+  document.getElementById('fStart').value = state.profile.start||'';
+  document.getElementById('fSem').value = state.profile.sem||'1';
+  document.getElementById('fIitmStart').value = state.profile.iitmStart||'';
+  document.getElementById('fIitmLevel').value = state.profile.iitmLevel||'foundation';
+  document.getElementById('fIitmTerm').value = state.profile.iitmTerm||'';
+
+  ['fName','fBranch','fStart','fIitmStart','fIitmTerm'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', e=>{
+      const map = {fName:'name',fBranch:'branch',fStart:'start',fIitmStart:'iitmStart',fIitmTerm:'iitmTerm'};
+      state.profile[map[id]] = e.target.value;
+      save(); renderTitleBlock();
+    });
+  });
+  document.getElementById('fSem').addEventListener('change', e=>{
+    state.profile.sem = e.target.value;
+    save(); renderTitleBlock(); renderOverview(); renderPlanner();
+  });
+  document.getElementById('fIitmLevel').addEventListener('change', e=>{
+    state.profile.iitmLevel = e.target.value;
+    save(); renderTitleBlock(); renderOverview();
+    if(typeof syncIitmSegToProfile==='function') syncIitmSegToProfile();
+  });
+  renderTitleBlock();
+}
+function renderTitleBlock(){
+  const p = state.profile;
+  document.getElementById('deckTitle').textContent = p.name ? p.name + "'s Logbook" : 'B.Tech Logbook';
+  document.getElementById('deckSub').textContent = (p.branch? p.branch+' · ':'') + 'B.Tech + IITM BS · Kharcha · Tasks';
+  document.getElementById('semBadge').textContent = 'SEM ' + (p.sem||'—') + ' / 8';
+  document.getElementById('iitmBadge').textContent = 'IITM · ' + (IITM_LEVEL_LABELS[p.iitmLevel]||'—');
+}
+
+/* ---------- Overview ---------- */
+function renderOverview(){
+  const sem = parseInt(state.profile.sem||'1',10);
+  // scale
+  document.getElementById('ovScaleFill').style.width = ((sem)/8*100)+'%';
+  const marksEl = document.getElementById('ovScaleMarks');
+  marksEl.innerHTML='';
+  for(let i=1;i<=8;i++){
+    const s=document.createElement('span');
+    s.textContent='S'+i;
+    if(i===sem) s.classList.add('now');
+    marksEl.appendChild(s);
+  }
+
+  // money
+  const mk = thisMonthKey();
+  const monthSpent = state.expenses.filter(e=>e.date.slice(0,7)===mk).reduce((s,e)=>s+Number(e.amount),0);
+  document.getElementById('ovMonthSpent').textContent = inr(monthSpent);
+  const totalSpent = state.expenses.reduce((s,e)=>s+Number(e.amount),0);
+  document.getElementById('ovTotalSpent').textContent = inr(totalSpent);
+  const budget = Number(state.profile.budget||0);
+  const budgetStat = document.getElementById('ovBudgetStat');
+  const budgetLeftEl = document.getElementById('ovBudgetLeft');
+  if(budget>0){
+    const left = budget - monthSpent;
+    budgetLeftEl.textContent = inr(left);
+    budgetStat.classList.toggle('over', left<0);
+    budgetStat.classList.toggle('ok', left>=0);
+  } else {
+    budgetLeftEl.textContent = 'Budget set nahi hai';
+    budgetStat.classList.remove('over','ok');
+  }
+
+  // planner progress — B.Tech
+  const semItems = state.semesters[String(sem)]||[];
+  const semDone = semItems.filter(i=>i.done).length;
+  document.getElementById('ovSemDone').textContent = semDone+' / '+semItems.length;
+
+  // planner progress — IITM BS
+  const iitmLevel = state.profile.iitmLevel||'foundation';
+  const iitmItems = state.iitm[iitmLevel]||[];
+  const iitmDone = iitmItems.filter(i=>i.done).length;
+  document.getElementById('ovIitmDone').textContent = iitmDone+' / '+iitmItems.length;
+
+  // combined overall
+  let allTotal=0, allDone=0;
+  Object.values(state.semesters).forEach(list=>{ allTotal+=list.length; allDone+=list.filter(i=>i.done).length; });
+  Object.values(state.iitm).forEach(list=>{ allTotal+=list.length; allDone+=list.filter(i=>i.done).length; });
+  document.getElementById('ovAllDone').textContent = allDone+' / '+allTotal;
+
+  const pending = state.tasks.filter(t=>!t.done).length;
+  document.getElementById('ovPendingTasks').textContent = pending;
+
+  // upcoming
+  const up = state.tasks.filter(t=>!t.done).sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')).slice(0,5);
+  const upEl = document.getElementById('ovUpcoming');
+  if(up.length===0){
+    upEl.innerHTML = '<div class="empty">Koi pending task nahi — Tasks tab me add karo.</div>';
+  } else {
+    upEl.innerHTML='';
+    up.forEach(t=>{
+      const row=document.createElement('div');
+      row.className='checklist-item';
+      const overdue = t.date && t.date < todayISO();
+      row.innerHTML = `<div class="txt">${escapeHtml(t.text)}<div class="meta ${overdue?'pri-high':''}">${t.date? (overdue?'Overdue · ':'Due ')+t.date : 'No date'} · <span class="pri-${t.priority}">${t.priority} priority</span></div></div>`;
+      upEl.appendChild(row);
+    });
+  }
+}
+
+/* ---------- Expenses ---------- */
+function initExpenses(){
+  document.getElementById('exDate').value = todayISO();
+  document.getElementById('budgetInput').value = state.profile.budget||'';
+  document.getElementById('exAdd').addEventListener('click', ()=>{
+    const date = document.getElementById('exDate').value || todayISO();
+    const cat = document.getElementById('exCat').value;
+    const amt = Number(document.getElementById('exAmt').value);
+    const note = document.getElementById('exNote').value.trim();
+    if(!amt || amt<=0){ document.getElementById('exAmt').focus(); return; }
+    state.expenses.push({id:uid(), date, category:cat, amount:amt, note});
+    document.getElementById('exAmt').value='';
+    document.getElementById('exNote').value='';
+    save(); renderExpenses(); renderOverview();
+  });
+  document.getElementById('budgetSave').addEventListener('click', ()=>{
+    state.profile.budget = Number(document.getElementById('budgetInput').value)||0;
+    save(); renderOverview();
+  });
+  renderExpenses();
+}
+function renderExpenses(){
+  const mk = thisMonthKey();
+  const monthExpenses = state.expenses.filter(e=>e.date.slice(0,7)===mk);
+  const byCat = {};
+  monthExpenses.forEach(e=>{ byCat[e.category]=(byCat[e.category]||0)+Number(e.amount); });
+  const max = Math.max(1, ...Object.values(byCat));
+  const bd = document.getElementById('exBreakdown');
+  const cats = Object.keys(byCat);
+  if(cats.length===0){
+    bd.innerHTML = '<div class="empty">Is mahine abhi koi kharcha entry nahi hai.</div>';
+  } else {
+    bd.innerHTML='';
+    cats.sort((a,b)=>byCat[b]-byCat[a]).forEach(c=>{
+      const row=document.createElement('div');
+      row.className='bar-row';
+      row.innerHTML = `<div class="bar-label">${c}</div><div class="bar-track"><div class="bar-fill" style="width:${(byCat[c]/max*100)}%"></div></div><div class="bar-amt">${inr(byCat[c])}</div>`;
+      bd.appendChild(row);
+    });
+  }
+
+  const list = document.getElementById('exList');
+  if(state.expenses.length===0){
+    list.innerHTML = '<div class="empty">Abhi tak koi expense add nahi kiya.</div>';
+    return;
+  }
+  const sorted = [...state.expenses].sort((a,b)=>b.date.localeCompare(a.date));
+  let html = '<table class="ledger"><thead><tr><th>Date</th><th>Category</th><th>Note</th><th style="text-align:right;">Amount</th><th></th></tr></thead><tbody>';
+  sorted.forEach(e=>{
+    html += `<tr><td>${e.date}</td><td><span class="tag">${e.category}</span></td><td>${escapeHtml(e.note||'—')}</td><td class="amt">${inr(e.amount)}</td><td><button class="del-btn" data-id="${e.id}" title="Delete">✕</button></td></tr>`;
+  });
+  html += '</tbody></table>';
+  list.innerHTML = html;
+  list.querySelectorAll('.del-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      state.expenses = state.expenses.filter(e=>e.id!==btn.dataset.id);
+      save(); renderExpenses(); renderOverview();
+    });
+  });
+}
+
+/* ---------- Planner (B.Tech + IITM BS) ---------- */
+let plannerTrack = 'btech'; // 'btech' | 'iitm'
+let currentPlannerSem = null;   // "1".."8"
+let currentPlannerLevel = null; // 'foundation' | 'diploma-prog' | 'diploma-ds' | 'degree'
+const IITM_LEVELS = ['foundation','diploma-prog','diploma-ds','degree'];
+
+function currentBucket(){
+  return plannerTrack==='btech' ? state.semesters : state.iitm;
+}
+function currentKey(){
+  return plannerTrack==='btech' ? currentPlannerSem : currentPlannerLevel;
+}
+
+function initPlanner(){
+  currentPlannerSem = state.profile.sem || '1';
+  currentPlannerLevel = state.profile.iitmLevel || 'foundation';
+
+  // track switch
+  document.querySelectorAll('#trackSeg button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('#trackSeg button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      plannerTrack = b.dataset.track;
+      document.getElementById('btechSegWrap').style.display = plannerTrack==='btech' ? '' : 'none';
+      document.getElementById('iitmSegWrap').style.display = plannerTrack==='iitm' ? '' : 'none';
+      renderPlanner();
+    });
+  });
+
+  // btech semester seg
+  const seg = document.getElementById('semSeg');
+  seg.innerHTML='';
+  for(let i=1;i<=8;i++){
+    const b=document.createElement('button');
+    b.textContent = 'S'+i;
+    if(String(i)===currentPlannerSem) b.classList.add('active');
+    b.addEventListener('click', ()=>{
+      currentPlannerSem = String(i);
+      seg.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      renderPlanner();
+    });
+    seg.appendChild(b);
+  }
+
+  // iitm level seg
+  const iseg = document.getElementById('iitmSeg');
+  iseg.innerHTML='';
+  IITM_LEVELS.forEach(lv=>{
+    const b=document.createElement('button');
+    b.textContent = IITM_LEVEL_LABELS[lv];
+    if(lv===currentPlannerLevel) b.classList.add('active');
+    b.addEventListener('click', ()=>{
+      currentPlannerLevel = lv;
+      iseg.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      renderPlanner();
+    });
+    iseg.appendChild(b);
+  });
+  window.syncIitmSegToProfile = function(){
+    currentPlannerLevel = state.profile.iitmLevel;
+    iseg.querySelectorAll('button').forEach(x=>{
+      x.classList.toggle('active', x.textContent===IITM_LEVEL_LABELS[currentPlannerLevel]);
+    });
+    renderPlanner();
+  };
+
+  document.getElementById('plAdd').addEventListener('click', ()=>{
+    const val = document.getElementById('plItem').value.trim();
+    if(!val) return;
+    const bucket = currentBucket(), key = currentKey();
+    if(!bucket[key]) bucket[key]=[];
+    bucket[key].push({id:uid(), text:val, done:false});
+    document.getElementById('plItem').value='';
+    save(); renderPlanner(); renderOverview();
+  });
+  renderPlanner();
+}
+function renderPlanner(){
+  const bucket = currentBucket(), key = currentKey();
+  const items = bucket[key]||[];
+  const done = items.filter(i=>i.done).length;
+  const label = plannerTrack==='btech' ? `B.Tech Semester ${key}` : `IITM BS — ${IITM_LEVEL_LABELS[key]}`;
+  document.getElementById('plStat').textContent = `${label}: ${done} / ${items.length} complete`;
+  const list = document.getElementById('plList');
+  if(items.length===0){
+    list.innerHTML = '<div class="empty">Yahan abhi koi item nahi hai — subjects, project, exam, course, ya certification add karo.</div>';
+    return;
+  }
+  list.innerHTML='';
+  items.forEach(it=>{
+    const row=document.createElement('div');
+    row.className='checklist-item'+(it.done?' done':'');
+    row.innerHTML = `<input type="checkbox" ${it.done?'checked':''}><div class="txt">${escapeHtml(it.text)}</div><button class="del-btn" title="Delete">✕</button>`;
+    row.querySelector('input').addEventListener('change', e=>{
+      it.done = e.target.checked;
+      save(); renderPlanner(); renderOverview();
+    });
+    row.querySelector('.del-btn').addEventListener('click', ()=>{
+      bucket[key] = bucket[key].filter(x=>x.id!==it.id);
+      save(); renderPlanner(); renderOverview();
+    });
+    list.appendChild(row);
+  });
+}
+
+/* ---------- Tasks ---------- */
+let taskFilter='all';
+function initTasks(){
+  document.getElementById('tkAdd').addEventListener('click', ()=>{
+    const text = document.getElementById('tkText').value.trim();
+    const date = document.getElementById('tkDate').value;
+    const pri = document.getElementById('tkPri').value;
+    if(!text) return;
+    state.tasks.push({id:uid(), text, date, priority:pri, done:false});
+    document.getElementById('tkText').value='';
+    document.getElementById('tkDate').value='';
+    save(); renderTasks(); renderOverview();
+  });
+  document.querySelectorAll('#tkFilter button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('#tkFilter button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      taskFilter = b.dataset.f;
+      renderTasks();
+    });
+  });
+  renderTasks();
+}
+function renderTasks(){
+  let items = [...state.tasks];
+  if(taskFilter==='pending') items = items.filter(t=>!t.done);
+  if(taskFilter==='done') items = items.filter(t=>t.done);
+  items.sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999'));
+  const list = document.getElementById('tkList');
+  if(items.length===0){
+    list.innerHTML = '<div class="empty">Yahan koi task nahi hai.</div>';
+    return;
+  }
+  list.innerHTML='';
+  items.forEach(t=>{
+    const overdue = !t.done && t.date && t.date < todayISO();
+    const row=document.createElement('div');
+    row.className='checklist-item'+(t.done?' done':'');
+    row.innerHTML = `<input type="checkbox" ${t.done?'checked':''}><div class="txt">${escapeHtml(t.text)}<div class="meta ${overdue?'pri-high':''}">${t.date? (overdue?'Overdue · ':'Due ')+t.date : 'No date'} · <span class="pri-${t.priority}">${t.priority}</span></div></div><button class="del-btn" title="Delete">✕</button>`;
+    row.querySelector('input').addEventListener('change', e=>{
+      t.done = e.target.checked;
+      save(); renderTasks(); renderOverview();
+    });
+    row.querySelector('.del-btn').addEventListener('click', ()=>{
+      state.tasks = state.tasks.filter(x=>x.id!==t.id);
+      save(); renderTasks(); renderOverview();
+    });
+    list.appendChild(row);
+  });
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------- init ---------- */
+initProfile();
+initExpenses();
+initPlanner();
+initTasks();
+renderOverview();
+</script>
+</body>
+</html>
